@@ -1,0 +1,16 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if marks %}
+<ul>
+    {% for tx in marks %}
+    <li>"{"</li>
+    <li><a href="{% url 'proof:btcproofforname' tx.name %}">{{ tx.address }}</a></li>
+    <li><a href="{% url 'proof:btcproofforname' tx.name %}">{{ tx.name }}</a></li>
+    <li>"}"</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No btc proof are available.</p>
+{% endif %}
+

@@ -3,8 +3,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 {% if name_list %}
 <ul>
-    {% for question in name_list %}
-    <li><a href= "{% url 'proof:btcproof' question %}">{{ question }}</a></li>
+    {% for name in name_list %}
+    <li><a href= "{% url 'proof:btcproofforname' name %}">{{ name }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
