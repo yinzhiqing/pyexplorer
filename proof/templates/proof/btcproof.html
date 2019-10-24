@@ -1,0 +1,19 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'proof/style.css' %}">
+{% if proof %}
+<ul>
+    <p>"{"</p>
+    <p>"address: "<a href="http://www.baidu.com">{{ proof.address }}</a></p>
+    <p>"state: "<a href="http://www.baidu.com">{{ proof.state }}</a></p>
+    <p>"txid: "<a href="http://www.baidu.com">{{ proof.txid }}</a></p>
+    <p>"update block: "<a href="http://www.baidu.com">{{ proof.update_block }}</a></p>
+    <p>"issuer: "<a href="http://www.baidu.com">{{ proof.issuer }}</a></p>
+    <p>"name: "<a href="http://www.baidu.com">{{ proof.name }}</a></p>
+    <p>"create block: "<a href="http://www.baidu.com">{{ proof.create_block }}</a></p>
+    <p>"}"</p>
+</ul>
+{% else %}
+<p>No proof are available.</p>
+{% endif %}
+

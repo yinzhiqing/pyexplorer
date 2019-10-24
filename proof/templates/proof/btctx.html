@@ -1,0 +1,21 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if btctx_list %}
+<ul>
+    {% for tx in btctx_list %}
+    <p>"{"</p>
+    <p>"address: "<a href="http://www.baidu.com">{{ tx.address }}</a></p>
+    <p>"state: "<a href="http://www.baidu.com">{{ tx.state }}</a></p>
+    <p>"txid: "<a href="http://www.baidu.com">{{ tx.txid }}</a></p>
+    <p>"update block: "<a href="http://www.baidu.com">{{ tx.update_block }}</a></p>
+    <p>"issuer: "<a href="http://www.baidu.com">{{ tx.issuer }}</a></p>
+    <p>"name: "<a href="http://www.baidu.com">{{ tx.name }}</a></p>
+    <p>"create block: "<a href="http://www.baidu.com">{{ tx.create_block }}</a></p>
+    <p>"}"</p>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No polls are available.</p>
+{% endif %}
+

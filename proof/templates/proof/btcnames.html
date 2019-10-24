@@ -1,0 +1,13 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+{% if name_list %}
+<ul>
+    {% for question in name_list %}
+    <li><a href= "{% url 'proof:btcproof' question %}">{{ question }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No polls are available.</p>
+{% endif %}
+
