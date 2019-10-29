@@ -13,6 +13,14 @@ from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 btc_url = "http://%s:%s@192.168.2.137:9409"
 btc_urlname = "btc"
 btc_urlpwd= "btc"
+
+def index(request):
+    template=loader.get_template('proof/index.html')
+    context = {
+            "name_list" : "hello world.",
+            }
+    return HttpResponse(template.render(context, request));  
+
 def btcnames(request):
     rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
 
@@ -63,5 +71,47 @@ def btctx(request):
             }
     return HttpResponse(template.render(context, request));
 
+
+def violasstate(request):
+    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
+
+    height = rpc_connection.violas_getviolasproofcurrentheight()
+    start = 0;
+    end = int(height["height"]);
+    if end > 25 :
+       start = end - 25;
+
+    plist = rpc_connection.violas_getviolasproofforheights(start, end)
+
+    template=loader.get_template('proof/violasstates.html')
+    context = {
+            "proof_list" : plist,
+            "start" : start,
+            "end": height,
+            }
+    return HttpResponse(template.render(context, request));
+
+
+def violasproofforheight(request, height):
+    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
+
+    response = rpc_connection.violas_getviolasproofforheight(height)
+
+    template=loader.get_template('proof/violasproof.html')
+    context = {
+            "proof" : response,
+            }
+    return HttpResponse(template.render(context, request));
+
+def violasproofforstate(request, state):
+    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
+
+    response = rpc_connection.violas_getviolasproofforstate(state)
+
+    template=loader.get_template('proof/violasproof.html')
+    context = {
+            "proof" : response,
+            }
+    return HttpResponse(template.render(context, request));
 
 

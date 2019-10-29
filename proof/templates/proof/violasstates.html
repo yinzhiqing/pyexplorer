@@ -5,12 +5,12 @@
 {% block title %}比特币转账存证{% endblock %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-{% if marks %}
+{% if proof_list %}
 <ul>
-    {% for tx in marks %}
+    {% for proof in proof_list %}
     <div class="form-group">
-        <li><a href="{% url 'proof:btcproofforname' tx.name %}">{{ tx.name }}</a></li>
-        <a href="{% url 'proof:btcproofforname' tx.name %}">{{ tx.address }}</a>
+        <li><a href="{% url 'proof:violasproofforheight' proof.height %}">{{ proof.height }}</a></li>
+        <a href="{% url 'proof:violasproofforstate' proof.state %}">{{ proof.state }}</a>
     </div>
     {% endfor %}
 </ul>
