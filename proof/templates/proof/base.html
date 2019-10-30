@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- 上述meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
         <!-- Bootstrap CSS -->
-        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <!-- link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" -->
         <title>{% block title %} Violas存证{% endblock %}</title>
     </head>
     <body>
@@ -18,7 +18,7 @@
                     <div class="form-group" align="left">
                         <a href="/proof/btcnames" class="text-success align="left"><ins>Violas存证</ins></a>
                         <a href="/proof/btcmarks" class="text-success "><ins>比特币存证</ins></a>
-                        <a href="/proof/violasstate" class="text-success "><ins>Violas链状态</ins></a>
+                        <a href="{% url 'proof:violasstates' 10002 10003 %}" class="text-success "><ins>Violas链状态</ins></a>
                     </div>
                 </form>
             </div>

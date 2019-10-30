@@ -3,6 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.template import loader
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
+ 
+from django.contrib import auth
 
 from django.urls import reverse
 import requests
@@ -72,14 +74,21 @@ def btctx(request):
     return HttpResponse(template.render(context, request));
 
 
-def violasstate(request):
+def violasstates(request, start, end):
     rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
 
-    height = rpc_connection.violas_getviolasproofcurrentheight()
-    start = 0;
-    end = int(height["height"]);
-    if end > 25 :
-       start = end - 25;
+
+    if end == 0 :
+       height = rpc_connection.violas_getviolasproofcurrentheight()
+       end = int(height["height"]);
+
+    if start == 0 :
+        if end > 25 :
+            start = end - 25;
+
+    if request.method == "POST" :
+        start = int(request.POST.get("start"))
+        end = int(request.POST.get("end"))
 
     plist = rpc_connection.violas_getviolasproofforheights(start, end)
 
@@ -87,10 +96,9 @@ def violasstate(request):
     context = {
             "proof_list" : plist,
             "start" : start,
-            "end": height,
+            "end": end,
             }
     return HttpResponse(template.render(context, request));
-
 
 def violasproofforheight(request, height):
     rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))

@@ -4,7 +4,15 @@
 {% load static %}
 {% block title %}比特币转账存证{% endblock %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+<div >
+    <form class="form-vssearch" action="/proof/" method="post">{% csrf_token %}
+        <label for="id_start">最小高度：{{ start }}</label>
+        <input type="number" name="start" class="form-control" id="id_start" min = 0 max = 99999999999 value={{ start }} />
+        <label for="id_end">最大高度：</label>
+        <input type="number" name="end" class="form-control" id="id_end"  min = 0 max = 99999999999 value={{ end }} />
+        <button type="submit" class="btn">查询</button>
+    </form>
+</div>
 {% if proof_list %}
 <ul>
     {% for proof in proof_list %}
