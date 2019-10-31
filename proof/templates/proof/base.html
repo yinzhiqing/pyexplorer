@@ -2,6 +2,34 @@
 {% load static %}
 <html lang="en">
     <head>
+        <style>
+.wrap{
+    width:900px;
+    margin:0 auto;
+    position: relative;
+}
+                #top{
+                    width:200px;
+                    height:500px;
+                    position: absolute;
+                    top:100px;
+                    left:0;
+                }
+
+                #left{
+                    width:1000px;
+                    position: absolute;
+                    top:200px;
+                    left:0;
+                }
+                #right{
+                    width:1000px;
+                    height:500px;
+                    position: absolute;
+                    top:200px;
+                    left:1000px;
+                }
+        </style>
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,9 +44,9 @@
                 <form class="form-model" action="" method="post">
                     <h3 class="text-center">Volas 存证系统</h3>
                     <div class="form-group" align="left">
-                        <a href="/proof/btcnames" class="text-success align="left"><ins>Violas存证</ins></a>
-                        <a href="/proof/btcmarks" class="text-success "><ins>比特币存证</ins></a>
-                        <a href="{% url 'proof:violasstates' 10002 10003 %}" class="text-success "><ins>Violas链状态</ins></a>
+                        <a href="{% url 'proof:btcnames' '*' %}" class="text-success align="left"><ins>Violas存证</ins></a>
+                        <a href="{% url 'proof:btcmarks' '*' %}" class="text-success"><ins>比特币存证</ins></a>
+                        <a href="{% url 'proof:violasstates' 10002 10003 0 %}" class="text-success "><ins>Violas链状态</ins></a>
                     </div>
                 </form>
             </div>
@@ -27,7 +55,17 @@
         <div class="container">
             <div id="col">
                 <form class="content" action="" method="post">
-                     {% block content %} {% endblock %}
+
+                      <aside class="control" id="top">
+                           {% block control %} {% endblock %}
+                      </aside>
+
+                      <aside class="list" id="left">
+                           {% block list %} {% endblock %}
+                      </aside>
+                      <section class="proof" id="right">
+                            {% block proof %} {% endblock %}
+                      </section>
                 </form>
             </div>
         </div>

@@ -9,13 +9,13 @@ from django.contrib import auth
 from django.urls import reverse
 import requests
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
+from .models import BtcRpc
 
 
 # Create your views here.
-btc_url = "http://%s:%s@192.168.2.137:9409"
-btc_urlname = "btc"
-btc_urlpwd= "btc"
-
+btc_url = "http://%s:%s@%s:%i"
+blogin = BtcRpc.objects.order_by('-ip')[:1]
+rpc_connection = AuthServiceProxy(btc_url%(blogin[0].user, blogin[0].password, blogin[0].ip, blogin[0].port))
 def index(request):
     template=loader.get_template('proof/index.html')
     context = {
@@ -23,18 +23,18 @@ def index(request):
             }
     return HttpResponse(template.render(context, request));  
 
-def btcnames(request):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
-
+def btcnames(request, name):
     response = rpc_connection.violas_listbtcproofnames()
     template=loader.get_template('proof/btcnames.html')
+    proof = ""
+    if name :
+        proof = rpc_connection.violas_getbtcproofforname(name) 
     context = {
             "name_list" : response,
+            "proof" : proof
             }
     return HttpResponse(template.render(context, request));
 def btcproofforname(request, name):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
-
     template=loader.get_template('proof/btcproof.html')
     response = rpc_connection.violas_getbtcproofforname(name)
     context = {
@@ -43,7 +43,6 @@ def btcproofforname(request, name):
     return HttpResponse(template.render(context, request));
     return render(request, 'proof/btcproof.html', context)
 def btcproofforaddress(request, address):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
     response = rpc_connection.violas_getbtcproofforaddress(addr)
     template=loader.get_template('proof/btcproof.html')
     context = {
@@ -52,20 +51,19 @@ def btcproofforaddress(request, address):
     return HttpResponse(template.render(context, request));
     return render(request, 'proof/btcproof.html', context)
 
-def btcmarks(request):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
-
+def btcmarks(request, name):
     response = rpc_connection.violas_listbtcmarks()
     template=loader.get_template('proof/btcmarks.html')
+    proof = ""
+    proof = rpc_connection.violas_getbtcproofforname(name)
     context = {
             "marks" : response,
+            "proof": proof,
             }
     return HttpResponse(template.render(context, request));
     #return render(request, 'proof/btcmarks.html', context)
 
 def btctx(request):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
-
     response = rpc_connection.violas_listbtcproofforstate('create')
     template=loader.get_template('proof/btctx.html')
     context = {
@@ -74,9 +72,7 @@ def btctx(request):
     return HttpResponse(template.render(context, request));
 
 
-def violasstates(request, start, end):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
-
+def violasstates(request, start, end, height):
 
     if end == 0 :
        height = rpc_connection.violas_getviolasproofcurrentheight()
@@ -92,16 +88,19 @@ def violasstates(request, start, end):
 
     plist = rpc_connection.violas_getviolasproofforheights(start, end)
 
+    proof = ""
+    if height >= start and height <= end:
+        proof = rpc_connection.violas_getviolasproofforheight(height)
     template=loader.get_template('proof/violasstates.html')
     context = {
             "proof_list" : plist,
             "start" : start,
             "end": end,
+            "proof": proof,
             }
     return HttpResponse(template.render(context, request));
 
 def violasproofforheight(request, height):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
 
     response = rpc_connection.violas_getviolasproofforheight(height)
 
@@ -112,7 +111,6 @@ def violasproofforheight(request, height):
     return HttpResponse(template.render(context, request));
 
 def violasproofforstate(request, state):
-    rpc_connection = AuthServiceProxy(btc_url%(btc_urlname, btc_urlpwd))
 
     response = rpc_connection.violas_getviolasproofforstate(state)
 
