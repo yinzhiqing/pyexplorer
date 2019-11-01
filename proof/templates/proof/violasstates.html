@@ -2,10 +2,10 @@
 {% extends "proof/base.html" %}
 
 {% load static %}
-{% block title %}比特币转账存证{% endblock %}
+{% block title %}Violas 状态存证{% endblock %}
 {% block control %}
 <div >
-    <form class="form-vssearch" action="/proof/" method="post">{% csrf_token %}</p>
+    <form class="form-vssearch" action="/proof/" method="post">{% csrf_token %}
         <p><label for="id_start">最小高度：{{ start }}</label></p>
         <p><input type="number" name="start" class="form-control" id="id_start" min = 0 max = 99999999999 value={{ start }} /></p>
         <p><label for="id_end">最大高度：</label></p>

@@ -54,11 +54,28 @@ def btcproofforaddress(request, address):
 def btcmarks(request, name):
     response = rpc_connection.violas_listbtcmarks()
     template=loader.get_template('proof/btcmarks.html')
+
+    order = 0
+    amount = 0
+    result = {"hash": "itest "}
+    if request.method == "POST" :
+       if request.POST.get("order") :
+           order = int( request.POST.get("order"))
+           amount= float( request.POST.get("amount"))
+       result = "inner"
+       result = rpc_connection.violas_sendbtcproofmark(request.POST.get("fromaddr"), request.POST.get("toaddr"), request.POST.get("vaddr"), int(request.POST.get("order")), request.POST.get("amount"), request.POST.get("name"))
     proof = ""
     proof = rpc_connection.violas_getbtcproofforname(name)
     context = {
             "marks" : response,
             "proof": proof,
+            "result": result,
+            "fromaddr": request.POST.get("fromaddr"),
+            "toaddr": request.POST.get("toaddr"),
+            "vaddr": request.POST.get("vaddr"),
+            "order": order,
+            "amount": amount,
+            "name": request.POST.get("name"),
             }
     return HttpResponse(template.render(context, request));
     #return render(request, 'proof/btcmarks.html', context)

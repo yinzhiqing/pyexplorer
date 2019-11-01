@@ -3,8 +3,34 @@
 
 {% load static %}
 {% block title %}比特币转账存证{% endblock %}
+
+{% block control %}
+<div>
+    <form class="form-sendmark" action="/proof/" method="post">{% csrf_token %}
+        <p><label for="id_fromaddr" >发送地址</p>
+        <p><input type="text" name="fromaddr" class="form-control" id="id_fromaddr" size=64 value={{ fromaddr }} /> </p>
+        <p><label for="id_toaddr" >接收地址</p>
+        <p><input type="text" name="toaddr" class="form-control" id="id_toaddr" size=64 value= {{ toaddr }} /> </p>
+        <p><label for="id_vaddr" >Violas地址</p>
+        <p><input type="text" name="vaddr" class="form-control" id="id_vaddr" size=64 value= {{ vaddr }} /> </p>
+        <p><label for="id_name" >名称</p>
+        <p><input type="text" name="name" class="form-control" id="id_name" size=10 value={{ name }} /> </p>
+        <p><label for="id_order" >Violas节点序号</p>
+        <p><input type="number" name="order" class="form-control" id="id_order" min=0 value={{ order }} /> </p>
+        <p><label for="id_amount" >比特币数量</p>
+        <p><input type="number" name="amount" class="form-control" id="id_amount" min=0 value={{ amount }} /> </p>
+        <p><button type="submit" class="btn">发送</button></p>
+    </form>
+    {% if result %}
+        <p> result </P>
+        <p> {{ result }}</p>
+    {% else %}
+        <p> no result </p>
+    {% endif %}
+</div>
+{% endblock %}
+
 {% block list %}
-<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
 {% if marks %}
 <ul>
     {% for tx in marks %}
@@ -25,7 +51,8 @@
     <p>"{"</p>
     <p>txid: {{ proof.txid }}</a></p>
     <p>issuer: {{ proof.issuer }}</a></p>
-    <p>address: {{ proof.address }}</a></p>
+    <p>receiver: {{ proof.receiver}}</a></p>
+    <p>violas address: {{ proof.address }}</a></p>
     <p>state: {{ proof.state }}</a></p>
     <p>name: {{ proof.name }}</a></p>
     <p>update block: {{ proof.update_block }}</a></p>
