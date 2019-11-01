@@ -52,33 +52,41 @@ def btcproofforaddress(request, address):
     return render(request, 'proof/btcproof.html', context)
 
 def btcmarks(request, name):
-    response = rpc_connection.violas_listbtcmarks()
-    template=loader.get_template('proof/btcmarks.html')
-
-    order = 0
-    amount = 0
-    result = {"hash": "itest "}
-    if request.method == "POST" :
-       if request.POST.get("order") :
-           order = int( request.POST.get("order"))
-           amount= float( request.POST.get("amount"))
-       result = "inner"
-       result = rpc_connection.violas_sendbtcproofmark(request.POST.get("fromaddr"), request.POST.get("toaddr"), request.POST.get("vaddr"), int(request.POST.get("order")), request.POST.get("amount"), request.POST.get("name"))
     proof = ""
-    proof = rpc_connection.violas_getbtcproofforname(name)
+    amount = 0
+    result = {""}
+    order = 0;
+    message = ""
+    response = ""
+    template = ""
+
+    try: 
+        response = rpc_connection.violas_listbtcmarks()
+        template=loader.get_template('proof/btcmarks.html')
+        proof = rpc_connection.violas_getbtcproofforname(name)
+
+        if request.method == "POST" :
+            result = "inner"
+            order = int( request.POST.get("order", 0))
+            amount= float( request.POST.get("amount", 0))
+            result = rpc_connection.violas_sendbtcproofmark(request.POST.get("fromaddr"), request.POST.get("toaddr"), request.POST.get("vaddr"), int(request.POST.get("order")), request.POST.get("amount"), request.POST.get("name"))
+    except:
+        message = "exception"
+    else:
+        message = "successed"
     context = {
             "marks" : response,
             "proof": proof,
             "result": result,
-            "fromaddr": request.POST.get("fromaddr"),
-            "toaddr": request.POST.get("toaddr"),
-            "vaddr": request.POST.get("vaddr"),
+            "fromaddr": request.POST.get("fromaddr", "bitcoin address(hex-string)"),
+            "toaddr": request.POST.get("toaddr", 'bitcoin address(hex-string)'),
+            "vaddr": request.POST.get("vaddr", 'violas address'),
             "order": order,
             "amount": amount,
-            "name": request.POST.get("name"),
+            "name": request.POST.get("name", 'proof name(unique)'),
+            "message":message
             }
-    return HttpResponse(template.render(context, request));
-    #return render(request, 'proof/btcmarks.html', context)
+    return HttpResponse(template.render(context, request))
 
 def btctx(request):
     response = rpc_connection.violas_listbtcproofforstate('create')
