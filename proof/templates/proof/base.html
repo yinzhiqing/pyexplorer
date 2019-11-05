@@ -42,9 +42,10 @@
                 <form class="form-model" action="" method="post">
                     <h3 class="text-center">Volas 存证系统</h3>
                     <div class="form-group" align="left">
-                        <a href="{% url 'proof:btcnames' '*' %}" class="text-success align="left"><ins>Violas存证</ins></a>
-                        <a href="{% url 'proof:btcmarks' '*' %}" class="text-success"><ins>比特币存证</ins></a>
-                        <a href="{% url 'proof:violasstates' 10002 10003 0 %}" class="text-success "><ins>Violas链状态</ins></a>
+                        <a href="{% url 'proof:btcnames' '*' %}" class="text-success align="left"><ins><font size=6>Violas存证</font></ins></a>
+                        <a href="{% url 'proof:btcmarks' '*' %}" class="text-success"><ins><font size=6>比特币存证</font></ins></a>
+                        <a href="{% url 'proof:violasstates' 10002 10003 0 %}" class="text-success "><ins><font size=6>Violas链状态</font></ins></a>
+                        <a href="{% url 'proof:btcexchange' 'start' '*' 0  %}" class="text-success "><ins><font size=6>btc vtoken exchange</font></ins></a>
                     </div>
                 </form>
             </div>

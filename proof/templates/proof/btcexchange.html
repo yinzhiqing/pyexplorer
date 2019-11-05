@@ -1,0 +1,86 @@
+<!doctype html>
+{% extends "proof/base.html" %}
+
+{% load static %}
+{% block title %}比特币转账存证{% endblock %}
+
+{% block control %}
+<div>
+    <form name="exchange" class="form-sendmark" action="/proof/" method="post">{% csrf_token %}
+        <p><label for="id_fromaddr" >发送地址</p>
+        <p><input type="text" name="fromaddress" class="form-control" id="id_fromaddress" size=64 value={{ fromaddress }} /> </p>
+        <p><label for="id_toaddress" >接收地址</p>
+        <p><input type="text" name="toaddress" class="form-control" id="id_toaddress" size=64 value={{ toaddress }} /> </p>
+        <p><label for="id_address" >Violas地址</p>
+        <p><input type="text" name="address" class="form-control" id="id_address" size=64 value={{ address }} /> </p>
+        <p><label for="id_vtoken" >Vtoken</p>
+        <p><input type="text" name="vtoken" class="form-control" id="id_vtoken" size=64 value={{ vtoken }} /> </p>
+        <p><label for="id_sequence" >序号</p>
+        <p><input type="number" name="sequence" class="form-control" id="id_sequence" min=0 value={{ sequence }} /> </p>
+        <p><label for="id_amount" >币数量</p>
+        <p><input type="number" name="amount" class="form-control" id="id_amount" min=0 value={{ amount }} /> </p>
+        <p><label for="id_mod" >操作类型</p>
+        <p><input type="radio" name="mod"  id="id_mode"  value='start' checked >start</input> </p>
+        <p><input type="radio" name="mod"  id="id_mode"  value='end' >end</input> </p>
+        <p><input type="radio" name="mod"  id="id_mode"  value='cancel' >cancel</input> </p>
+        <p><button type="submit" class="btn">发送</button></p>
+    </form>
+
+    {% for rmod in  document.exchange.mod %}
+        {% if mod == rmod %}
+        {% endif %}
+    {% endfor %}
+
+    {% if result %}
+        <p> message </p>
+        <p> {{ message }}</p>
+        <p> result </P>
+        <p> {{ result }}</p>
+    {% else %}
+        <p> no result </p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block list %}
+{% if proof_list %}
+<ul>
+    <div class="form-group" align='left'>
+        <a href="{% url 'proof:btcexchange' 'start' '*' 0  %}" class="text-success "><ins><font size=5>start list</font></ins></a>
+        <a href="{% url 'proof:btcexchange' 'end' '*' 0  %}" class="text-success "><ins><font size=5>end list</font></ins></a>
+        <a href="{% url 'proof:btcexchange' 'cancel' '*' 0  %}" class="text-success "><ins><font size=5>cancel list</font></ins></a>
+    </div>
+    {% for proof in proof_list %}
+    <div class="form-group">
+        <li><a href="{% url 'proof:btcexchange' state proof.address proof.sequence %}">{{ proof.address }}</a></li>
+        <a href="{% url 'proof:btcexchange' state proof.address proof.sequence %}">{{ proof.sequence }}</a>
+    </div>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No btc proof are available.</p>
+{% endif %}
+{% endblock %}
+
+{% block proof%}
+{% if proof %}
+<ul>
+    <p>"{"</p>
+    <p>txid: {{ proof.txid }}</a></p>
+    <p>issuer: {{ proof.issuer }}</a></p>
+    <p>receiver: {{ proof.receiver}}</a></p>
+    <p>violas address: {{ proof.address }}</a></p>
+    <p>state: {{ proof.state }}</a></p>
+    <p>sequence: {{ proof.sequence}}</a></p>
+    <p>vtoken: {{ proof.vtoken}}</a></p>
+    {% if proof.amount > 0%}
+        <p>amount: {{ proof.amount}}</a></p>
+    {% endif %}
+    <p>update block: {{ proof.update_block }}</a></p>
+    <p>create block: {{ proof.creation_block }}</a></p>
+    <p>"}"</p>
+</ul>
+{% else %}
+<p>No proof are available.</p>
+{% endif %}
+{% endblock %}

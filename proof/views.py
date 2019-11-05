@@ -145,4 +145,55 @@ def violasproofforstate(request, state):
             }
     return HttpResponse(template.render(context, request));
 
+def btcexchange(request, state, address, sequence):
+    if state != "start" and state != "end" and state != "cancel":
+        state = 'start'
+    plist = rpc_connection.violas_listexproofforstate(state)
+    proof = ""
+    gsequence = 0
+    gaddress = ""
+    result = ""
+    fromaddress = ""
+    toaddress = ""
+    mod = "start"
+    message=""
+    amount = 0
+    vtoken=""
+
+    if address != '*' or sequence > 0:
+        proof = rpc_connection.violas_getexproofforaddress(address, sequence)
+
+    if request.method == "POST" :
+        fromaddress = request.POST.get("fromaddress")
+        toaddress = request.POST.get("toaddress")
+        mod = request.POST.get("mod")
+        gaddress = request.POST.get("address")
+        gsequence = int(request.POST.get("sequence", 0))
+        amount = request.POST.get("amount")
+        vtoken = request.POST.get("vtoken")
+        if mod == "start":
+            result = rpc_connection.violas_sendexproofstart(fromaddress, toaddress, gaddress, gsequence, vtoken)
+        elif mod == "end":
+            result = rpc_connection.violas_sendexproofend(fromaddress, toaddress, gaddress, gsequence, amount)
+        elif mod == "cancel":
+            result = rpc_connection.violas_sendexproofcancel(fromaddress, toaddress, gaddress, gsequence)
+
+
+
+    template=loader.get_template('proof/btcexchange.html')
+    context = {
+            "proof" : proof,
+            "proof_list": plist,
+            "fromaddress": fromaddress,
+            "toaddress": toaddress,
+            "sequence": gsequence,
+            "mod": mod,
+            "address": gaddress,
+            "amount" : amount,
+            "result": result,
+            "message": message,
+            "vtoken": vtoken,
+            "state": state,
+            }
+    return HttpResponse(template.render(context, request));
 
