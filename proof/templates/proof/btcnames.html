@@ -12,7 +12,6 @@
 {% block proof %}
 {% if proof %}
 <ul>
-    <p>"{"</p>
     <p>txid: {{ proof.txid }}</a></p>
     <p>issuer: {{ proof.issuer }}</a></p>
     <p>address: {{ proof.address }}</a></p>
@@ -20,7 +19,6 @@
     <p>name: {{ proof.name }}</a></p>
     <p>update block: {{ proof.update_block }}</a></p>
     <p>create block: {{ proof.creation_block }}</a></p>
-    <p>"}"</p>
 </ul>
 {% else %}
 <p>No proof are available.</p>

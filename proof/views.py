@@ -78,12 +78,12 @@ def btcmarks(request, name):
             "marks" : response,
             "proof": proof,
             "result": result,
-            "fromaddr": request.POST.get("fromaddr", "bitcoin address(hex-string)"),
-            "toaddr": request.POST.get("toaddr", 'bitcoin address(hex-string)'),
-            "vaddr": request.POST.get("vaddr", 'violas address'),
+            "fromaddr": request.POST.get("fromaddr", ""),
+            "toaddr": request.POST.get("toaddr", ''),
+            "vaddr": request.POST.get("vaddr", ''),
             "order": order,
             "amount": amount,
-            "name": request.POST.get("name", 'proof name(unique)'),
+            "name": request.POST.get("name", ''),
             "message":message
             }
     return HttpResponse(template.render(context, request))
