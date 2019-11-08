@@ -159,6 +159,7 @@ def btcexchange(request, state, address, sequence):
     message=""
     amount = 0
     vtoken=""
+    height = 0
 
     if address != '*' or sequence > 0:
         proof = rpc_connection.violas_getexproofforaddress(address, sequence)
@@ -171,10 +172,11 @@ def btcexchange(request, state, address, sequence):
         gsequence = int(request.POST.get("sequence", 0))
         amount = request.POST.get("amount")
         vtoken = request.POST.get("vtoken")
+        height = int(request.POST.get("height", 0))
         if mod == "start":
             result = rpc_connection.violas_sendexproofstart(fromaddress, toaddress, gaddress, gsequence, vtoken)
         elif mod == "end":
-            result = rpc_connection.violas_sendexproofend(fromaddress, toaddress, gaddress, gsequence, amount)
+            result = rpc_connection.violas_sendexproofend(fromaddress, toaddress, gaddress, gsequence, amount, height)
         elif mod == "cancel":
             result = rpc_connection.violas_sendexproofcancel(fromaddress, toaddress, gaddress, gsequence)
 
@@ -190,6 +192,7 @@ def btcexchange(request, state, address, sequence):
             "mod": mod,
             "address": gaddress,
             "amount" : amount,
+            "height" : height,
             "result": result,
             "message": message,
             "vtoken": vtoken,
